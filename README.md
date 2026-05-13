@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white)](https://python.org/)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.x-green?logo=opencv&logoColor=white)](https://opencv.org/)
 [![MediaPipe](https://img.shields.io/badge/MediaPipe-Google-orange?logo=google&logoColor=white)](https://mediapipe.dev/)
-[![PyAutoGUI](https://img.shields.io/badge/Automation-PyAutoGUI-red)](https://pyautogui.readthedocs.io/)
+[![PyAutoGUI](https://img.shields.io/badge/Automation-PyAutoGUI-red?logo=windows&logoColor=white)](https://pyautogui.readthedocs.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](https://opensource.org/licenses/MIT)
 
 Hey! I'm Aman. I built **Kinetix** to entirely remove the friction between human intent and computer navigation. Using standard webcams to control an OS usually results in high latency, jittery cursors, and accidental clicks. I engineered Kinetix to drop the traditional "cursor" entirely, replacing it with a lightning-fast, context-aware macro routing engine that controls your computer using intuitive structural hand gestures.
@@ -12,7 +12,7 @@ Hey! I'm Aman. I built **Kinetix** to entirely remove the friction between human
 
 ## 🎯 Engineering Objective
 
-**The Problem:** Controlling a PC via webcam usually involves mapping your index finger to the mouse cursor. This relies heavily on perfect lighting, high-end cameras, and holding your hand perfectly still in the air—which causes massive arm fatigue and results in constant misclicks.
+**The Problem:** Controlling a PC via webcam usually involves mapping your index finger to the mouse cursor. This relies heavily on perfect lighting, high-end cameras, and holding your hand perfectly still in the air-which causes massive arm fatigue and results in constant misclicks.
 
 **The Solution:** Kinetix abandons cursor-tracking. Instead, it acts as a background spatial-recognition engine. It reads distinct macro-gestures (like a Peace Sign or a Closed Fist) and translates them into instant, system-level OS hotkeys (like scrolling or minimizing windows). It features a "Typing Shield" that dynamically ignores your hands when they rest near your keyboard, ensuring zero accidental interference while you work.
 
@@ -24,32 +24,35 @@ I designed the engine to be as lightweight as possible. It captures frames, proc
 
 ```text
      [Webcam Feed] ──(Raw Frames @ 30FPS)──> [OpenCV Frame Buffer]
-                                                    │
-                                                    ▼
-                                      [MediaPipe Vision Task Model]
-                                      (gesture_recognizer.task)
-                                                    │
-             ┌──────────────────────────────────────┴──────────────────────────────────────┐
-             ▼                                                                             ▼
-   [Spatial Validation]                                                         [Context Router]
-   ├─ 1. Typing Shield Check (Y-Axis)                                           ├─ 1. Detect Active Window (Browser, IDE, Spotify)
-   ├─ 2. Ghost Hand Filter (Wrist Distance)                                     └─ 2. Assign Hotkey Protocol
-   └─ 3. Frame Debounce (Micro-stutter fix)                                                │
-             │                                                                             │
-             └──────────────────────────────────────┬──────────────────────────────────────┘
-                                                    ▼
-                                       [ActionController Engine]
-                                      (Translates Math to Hotkeys)
-                                                    │
-             ┌──────────────────────────────────────┴──────────────────────────────────────┐
-             ▼                                                                             ▼
-    [Continuous Actions]                                                          [Instant Triggers]
-    (Scroll, Zoom, Volume)                                                        (Minimize, Escape)
-             │                                                                             │
-             └──────────────────────────────────────┬──────────────────────────────────────┘
-                                                    ▼
-                                          [PyAutoGUI Interface]
-                                     (Executes Native OS Commands)
+                                    │
+                                    ▼
+                      [MediaPipe Vision Task Model]
+                        (gesture_recognizer.task)
+                                    │
+         ┌──────────────────────────┴──────────────────────────┐
+         ▼                                                     ▼
+[Spatial Validation]                                    [Context Router]
+├─ 1. Typing Shield Check                        ├─ 1. Detect Active Window
+│     (Y-Axis)                                   │     (Browser, IDE, Spotify)
+├─ 2. Ghost Hand Filter                          └─ 2. Assign Hotkey Protocol
+│     (Wrist Distance)                                         │
+└─ 3. Frame Debounce                                           │
+      (Micro-stutter fix)                                      │
+         │                                                     │
+         └──────────────────────────┬──────────────────────────┘
+                                    ▼
+                        [ActionController Engine]
+                       (Translates Math to Hotkeys)
+                                    │
+         ┌──────────────────────────┴──────────────────────────┐
+         ▼                                                     ▼
+[Continuous Actions]                                  [Instant Triggers]
+(Scroll, Zoom, Volume)                                (Minimize, Escape)
+         │                                                     │
+         └──────────────────────────┬──────────────────────────┘
+                                    ▼
+                          [PyAutoGUI Interface]
+                      (Executes Native OS Commands)
 ```
 
 ---
