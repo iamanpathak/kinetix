@@ -15,6 +15,7 @@ import config
 from actions import ActionController
 
 def resource_path(relative_path):
+    """Resolves the absolute path to resources, accommodating PyInstaller environments."""
     try:
         base_path = sys._MEIPASS
     except Exception:
@@ -23,6 +24,7 @@ def resource_path(relative_path):
 
 print("Booting Kinetix OS Controller...")
 
+# Initialize the Mediapipe gesture recognition model
 base_options = python.BaseOptions(model_asset_path=resource_path(config.MODEL_PATH))
 options = vision.GestureRecognizerOptions(
     base_options=base_options,
@@ -32,6 +34,7 @@ options = vision.GestureRecognizerOptions(
 )
 recognizer = vision.GestureRecognizer.create_from_options(options)
 
+# Configure the camera capture stream
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, config.CAM_WIDTH)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, config.CAM_HEIGHT)
@@ -53,6 +56,7 @@ while cap.isOpened():
     success, frame = cap.read()
     if not success: break
 
+    # Pre-process the frame for the ML pipeline
     frame = cv2.flip(frame, 1)
     rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     
@@ -73,7 +77,7 @@ while cap.isOpened():
         hand_lost_time = 0 
         num_hands = len(results.hand_landmarks)
         
-        # Ghost Hand Filter
+        # Spatial Filter: Merge overlapping hands tracking the same physical limb
         if num_hands == 2:
             w1 = results.hand_landmarks[0][0] 
             w2 = results.hand_landmarks[1][0] 
@@ -81,26 +85,24 @@ while cap.isOpened():
             if wrist_dist < 0.20:
                 num_hands = 1 
         
-        # --- 2 HANDS: ZOOM ---
+        # --- 2 HANDS: ZOOM ROUTING ---
         if num_hands == 2:
-            last_zoom_time = time.time() # Mark that we are actively zooming
+            last_zoom_time = time.time() 
             hand1, hand2 = results.hand_landmarks[0], results.hand_landmarks[1]
             dist = math.hypot(hand1[8].x - hand2[8].x, hand1[8].y - hand2[8].y)
             controller.two_hand_zoom(dist)
             hud_text, hud_color = "🤌 ZOOMING", (0, 165, 255)
             
-        # --- 1 HAND: GESTURES ---
+        # --- 1 HAND: GESTURE ROUTING ---
         elif num_hands == 1:
             controller.anchors["zoom_dist"] = None 
             
-            # --- THE ZOOM SHIELD ---
-            # If you were zooming less than 0.4 seconds ago, IGNORE all 1-hand gestures.
-            # This completely stops the accidental "Victory Scroll" when the camera blurs!
+            # Zoom Shield: Enforce a 0.4s buffer to prevent erroneous single-hand triggers post-zoom
             if time.time() - last_zoom_time < 0.4:
                 hud_text = "⏳ ZOOM SHIELD"
                 hud_color = (150, 150, 150)
             else:
-                # Normal 1-hand logic runs here
+                # Core single-hand recognition and routing logic
                 hand = results.hand_landmarks[0]
                 gesture = results.gestures[0][0].category_name
                 hand_x, hand_y = hand[9].x, hand[9].y
@@ -134,12 +136,14 @@ while cap.isOpened():
                 if gesture not in ["Open_Palm", "Victory", "ILoveYou", "Closed_Fist", "Thumb_Down", "None"]:
                     controller.reset_anchors()
     else:
+        # Handle loss of tracking gracefully by resetting anchors after a brief delay
         if hand_lost_time == 0:
             hand_lost_time = time.time()
             
         if time.time() - hand_lost_time > 0.3:
             controller.reset_anchors()
 
+    # Render HUD if running in visible mode
     if not config.GHOST_MODE:
         cv2.rectangle(frame, (10, 10), (380, 60), (20, 20, 20), -1) 
         cv2.putText(frame, hud_text, (20, 45), cv2.FONT_HERSHEY_SIMPLEX, 1, hud_color, 2)

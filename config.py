@@ -2,15 +2,15 @@
 # config.py - Kinetix OS Settings
 # ==========================================
 
-# Set to True to hide the camera and run completely invisibly
+# Set to True to suppress the camera feed UI and run as a background process
 GHOST_MODE = False 
 
-# Camera Performance Settings (Anti-Lag)
+# Camera hardware constraints (optimized for low latency)
 CAM_WIDTH = 640
 CAM_HEIGHT = 480
 FPS = 30
 
-# AI Settings
+# Computer Vision and ML Configuration
 MODEL_PATH = 'gesture_recognizer.task'
 MAX_HANDS = 2 
-MIN_CONFIDENCE = 0.70 # Ignore accidental jitters
+MIN_CONFIDENCE = 0.70
