@@ -6,53 +6,53 @@
 [![PyAutoGUI](https://img.shields.io/badge/Automation-PyAutoGUI-red?logo=windows&logoColor=white)](https://pyautogui.readthedocs.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](https://opensource.org/licenses/MIT)
 
-Hey! I'm Aman. I built **Kinetix** to entirely remove the friction between human intent and computer navigation. Using standard webcams to control an OS usually results in high latency, jittery cursors, and accidental clicks. I engineered Kinetix to drop the traditional "cursor" entirely, replacing it with a lightning-fast, context-aware macro routing engine that controls your computer using intuitive structural hand gestures.
+Hey! I'm Aman. I built **Kinetix** to reduce the friction in human-computer interaction. Controlling an OS through standard webcams usually involves high latency, jittery cursors, and accidental clicks. I engineered Kinetix as a lightweight, context-aware gesture routing engine that translates structural hand gestures into real-time system actions for touchless navigation and productivity control.
 
 ---
 
 ## 🎯 Engineering Objective
 
-**The Problem:** Controlling a PC via webcam usually involves mapping your index finger to the mouse cursor. This relies heavily on perfect lighting, high-end cameras, and holding your hand perfectly still in the air-which causes massive arm fatigue and results in constant misclicks.
+**The Problem:** Controlling a PC via webcam usually involves mapping your index finger to the mouse cursor. This relies heavily on perfect lighting, high-end cameras, and holding your hand perfectly still in the air - which causes massive arm fatigue and results in constant misclicks.
 
-**The Solution:** Kinetix abandons cursor-tracking. Instead, it acts as a background spatial-recognition engine. It reads distinct macro-gestures (like a Peace Sign or a Closed Fist) and translates them into instant, system-level OS hotkeys (like scrolling or minimizing windows). It features a "Typing Shield" that dynamically ignores your hands when they rest near your keyboard, ensuring zero accidental interference while you work.
+**The Solution:** Kinetix reduces dependence on traditional cursor-tracking. Instead, it acts as a background spatial-recognition engine that interprets structural hand gestures and translates them into real-time system-level actions for navigation, media control, scrolling, zooming, and productivity workflows. It features a “Typing Shield” that dynamically ignores your hands when they rest near your keyboard, ensuring minimal accidental interference while you work. The system is designed with an extensible gesture-routing architecture, allowing additional gestures, action mappings, and context-aware workflows to be integrated without modifying the core vision pipeline.
 
 ---
 
 ## 🏗️ System Architecture & Execution Flow
 
-I designed the engine to be as lightweight as possible. It captures frames, processes spatial data locally using a pre-trained neural network, applies debounce algorithms to filter out camera blur, and routes the validated gesture to the OS.
+I designed the engine to be as lightweight as possible. It captures frames, processes spatial data locally through a pre-trained vision model, applies debounce algorithms to filter out camera blur, and routes the validated gesture to the OS.
 
 ```text
-     [Webcam Feed] ──(Raw Frames @ 30FPS)──> [OpenCV Frame Buffer]
-                                    │
-                                    ▼
-                      [MediaPipe Vision Task Model]
-                        (gesture_recognizer.task)
-                                    │
-         ┌──────────────────────────┴──────────────────────────┐
-         ▼                                                     ▼
-[Spatial Validation]                                    [Context Router]
-├─ 1. Typing Shield Check                        ├─ 1. Detect Active Window
-│     (Y-Axis)                                   │     (Browser, IDE, Spotify)
-├─ 2. Ghost Hand Filter                          └─ 2. Assign Hotkey Protocol
-│     (Wrist Distance)                                         │
-└─ 3. Frame Debounce                                           │
-      (Micro-stutter fix)                                      │
-         │                                                     │
-         └──────────────────────────┬──────────────────────────┘
-                                    ▼
-                        [ActionController Engine]
-                       (Translates Math to Hotkeys)
-                                    │
-         ┌──────────────────────────┴──────────────────────────┐
-         ▼                                                     ▼
-[Continuous Actions]                                  [Instant Triggers]
-(Scroll, Zoom, Volume)                                (Minimize, Escape)
-         │                                                     │
-         └──────────────────────────┬──────────────────────────┘
-                                    ▼
-                          [PyAutoGUI Interface]
-                      (Executes Native OS Commands)
+[Webcam Feed] ──(Raw Frames @ 30FPS)──> [OpenCV Frame Buffer]
+                                                 │
+                                                 ▼
+                                   [MediaPipe Vision Task Model]
+                                     (gesture_recognizer.task)
+                                                 │
+                      ┌──────────────────────────┴──────────────────────────┐
+                      ▼                                                     ▼
+             [Spatial Validation]                                    [Context Router]
+             ├─ 1. Typing Shield Check                        ├─ 1. Detect Active Window
+             │     (Y-Axis)                                   │     (Browser, IDE, Spotify)
+             ├─ 2. Ghost Hand Filter                          └─ 2. Assign Hotkey Protocol
+             │     (Wrist Distance)                                         │
+             └─ 3. Frame Debounce                                           │
+                   (Micro-stutter fix)                                      │
+                      │                                                     │
+                      └──────────────────────────┬──────────────────────────┘
+                                                 ▼
+                                     [ActionController Engine]
+                                    (Translates Math to Hotkeys)
+                                                 │
+                      ┌──────────────────────────┴──────────────────────────┐
+                      ▼                                                     ▼
+             [Continuous Actions]                                  [Instant Triggers]
+             (Scroll, Zoom, Volume)                                (Minimize, Escape)
+                      │                                                     │
+                      └──────────────────────────┬──────────────────────────┘
+                                                 ▼
+                                       [PyAutoGUI Interface]
+                                   (Executes Native OS Commands)
 ```
 
 ---
@@ -69,13 +69,13 @@ Hold the pose and move your hand to trigger these actions dynamically:
 *   **🤟 Spiderman (Rock On): The Audio Mixer**
     *   *Action:* Move hand Up/Down to adjust your system master volume.
 *   **✋ Open Palm: The Media & Tab Engine**
-    *   *Hover Still (0.6s):* Play/Pause active media. The engine natively detects if you are on YouTube and triggers its specific UI animation, otherwise it uses universal OS media keys.
-    *   *Swipe Right/Left:* Switch to Next/Previous Tab (Browser/VS Code) or Next/Previous Track (Spotify).
+    *   *Hover Still (0.6s):* Action: Play/Pause active media. The engine dynamically adapts actions based on the active application context, including browsers, IDEs, and media applications.
+    *   *Swipe Right/Left:* Action: Switch to Next/Previous Tab (Browser/VS Code) or Next/Previous Track (Spotify).
 *   **👐 Two Hands: The Zoom Engine**
     *   *Action:* Bring both hands closer together or further apart to trigger precise, atomic zooming in documents or browsers.
 
 ### ⚡ Instant Triggers
-Fire instantly the microsecond the camera detects the pose (no holding required):
+Fire instantly the moment the camera detects the pose (no holding required):
 
 *   **👎 Thumbs Down: The Boss Key**
     *   *Action:* Instantly minimizes all windows and displays the desktop (`Win + D`). *Pro-Tip: Tilt your hand slightly sideways so the camera sees the profile of your thumb!*
@@ -104,9 +104,13 @@ kinetix/
 
 ## 🛠️ Technical Decisions & Trade-offs
 
-* **Atomic Hotkeys vs. Held Keys:** In earlier versions, gestures simulated physically holding down keys (like `Ctrl` for zooming). *Tradeoff:* Camera stutters caused the release command to drop, resulting in permanently stuck keys. I refactored the engine to use "Atomic" keystrokes (e.g., pulsing `Ctrl + =`), making stuck keys mathematically impossible.
-* **Frame Counting vs. Timestamps:** Instead of relying on Python's `time.time()` for critical system triggers, Kinetix validates gestures by counting raw hardware frames. *Tradeoff:* This bypasses CPU time-drift and ensures a gesture fires the exact microsecond it is validated across two consecutive frames.
-* **Local Processing vs. Cloud APIs:** The entire pipeline runs locally on the CPU. *Tradeoff:* Requires shipping the `.task` model with the code, but guarantees zero latency, requires no internet connection, and ensures absolute user privacy.
+* **Atomic Hotkeys vs. Held Keys:** In earlier versions, gestures simulated physically holding down keys (like `Ctrl` for zooming). *Tradeoff:* Camera stutters occasionally caused release commands to fail, resulting in stuck modifier keys. I refactored the engine to use atomic keystrokes (e.g., pulsing `Ctrl + =`) instead, eliminating the risk of stuck modifier states during gesture interruptions.
+
+* **Frame Validation vs. Time-Based Triggers:** Instead of relying entirely on Python timing intervals for critical system actions, Kinetix validates gestures across consecutive frame states. *Tradeoff:* This improves consistency during rapid hand movement and reduces accidental trigger execution caused by motion blur or unstable frame timing.
+
+* **Local Processing vs. Cloud APIs:** The entire processing pipeline runs locally on the CPU. *Tradeoff:* Requires shipping the `.task` model with the application, but guarantees low latency, offline functionality, and complete webcam privacy without transmitting visual data externally.
+
+* **Gesture Cooldowns vs. Instant Responsiveness:** Critical actions use cooldown windows and micro-validation delays to prevent repeated accidental execution during unstable gesture transitions. *Tradeoff:* Introduces a slight delay before activation, but significantly improves interaction reliability and usability.
 
 ---
 
@@ -157,7 +161,7 @@ pyinstaller --onefile --noconsole --add-data "gesture_recognizer.task;." main.py
 
 ## 🔒 Privacy & Security
 
-Kinetix is designed with absolute privacy in mind. It processes your webcam feed **strictly locally** in volatile memory (RAM). It does not save photos, record video, or communicate with any external servers. The OpenCV frame buffer is actively overwritten 30 times a second.
+Kinetix is designed with privacy in mind. All gesture processing runs locally in volatile memory (RAM) without storing photos, recording video, or transmitting webcam data to external servers.
 
 ---
 
