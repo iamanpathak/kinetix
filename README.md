@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white)](https://python.org/)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.x-green?logo=opencv&logoColor=white)](https://opencv.org/)
 [![MediaPipe](https://img.shields.io/badge/MediaPipe-Google-orange?logo=google&logoColor=white)](https://mediapipe.dev/)
-[![PyAutoGUI](https://img.shields.io/badge/Automation-PyAutoGUI-red?logo=windows&logoColor=white)](https://pyautogui.readthedocs.io/)
+[![PyAutoGUI](https://img.shields.io/badge/Automation-PyAutoGUI-red?logo=powershell&logoColor=white)](https://pyautogui.readthedocs.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](https://opensource.org/licenses/MIT)
 
 Hey! I'm Aman. I built **Kinetix** to reduce the friction in human-computer interaction. Controlling an OS through standard webcams usually involves high latency, jittery cursors, and accidental clicks. I engineered Kinetix as a lightweight, context-aware gesture routing engine that translates structural hand gestures into real-time system actions for touchless navigation and productivity control.
