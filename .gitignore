@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual environments
+# Virtual environments & Secrets
 venv/
 env/
 .env
@@ -12,6 +12,16 @@ env/
 build/
 dist/
 *.spec
+
+# Executables
+*.exe
+
+# IDE / Editor Settings
+.vscode/
+.idea/
+
+# Logs and Crash Reports
+*.log
 
 # OS generated files
 .DS_Store
