@@ -128,8 +128,7 @@ class ActionController:
             self.current_trigger = gesture_name
             self.anchors["trigger_time"] = current_time
             return "⏳ Catching..."
-        
-        # 🛡️ THE FIX: Micro-verification (0.1s). 
+         
         # Prove you actually want to do a Thumbs Down, so it doesn't glitch and lock you out!
         if current_time - self.anchors["trigger_time"] > 0.1:
             # 🚀 Cooldown increased to 1.5s so you don't accidentally rapidly double-minimize
